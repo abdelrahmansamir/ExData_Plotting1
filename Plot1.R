@@ -8,7 +8,7 @@ dataReq <- subset(eData, eData$Date == "1/2/2007" | eData$Date == "2/2/2007")
 dataReq$newDate <- with(dataReq, as.POSIXct(paste(Date, Time, sep = " "), format="%d/%m/%Y %H:%M:%S"))
 apwr <- as.numeric(dataReq$Global_active_power)
 ## creates Plot 1
-png("plot1.png")
+png("plot1.png", width = 480, height = 480)
 hist(apwr, freq = TRUE, main = "Global Active Power", xlab = "Global Active Power (kilowatts)", ylab = "Frequency", col = "red")
 dev.off()
 
