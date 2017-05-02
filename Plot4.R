@@ -13,7 +13,7 @@ desiredData$newMeter2 <- as.numeric(as.character(desiredData$Sub_metering_2))
 desiredData$newMeter3 <- as.numeric(as.character(desiredData$Sub_metering_3))
 desiredData$newVolt <- as.numeric(as.character(desiredData$Voltage))
 ## step 3 -> creates Plot 4
-png("plot4.png")
+png("plot4.png", width = 480, height = 480)
 par(mfrow=c(2,2))
 plot(desiredData$newDate, desiredData$Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
 plot(desiredData$newDate, desiredData$newVolt, type = "l", xlab = "datetime", ylab = "Voltage")
