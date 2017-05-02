@@ -1,25 +1,63 @@
-## step 1 -> download data
+##  download data
 fileURL <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
 download.file(fileURL, "household_power_consumption.zip")
 unzip("household_power_consumption.zip")
-eData <- read.csv("household_power_consumption.txt",sep = ";")
-## step 2 -> cleans data
-desiredData <- subset(eData, eData$Date == "1/2/2007" | eData$Date == "2/2/2007")
-desiredData$newDate <- with(desiredData, as.POSIXct(paste(Date, Time, sep = " "), format="%d/%m/%Y %H:%M:%S"))
-pwr <- as.numeric(desiredData$Global_active_power)
-desiredData$Global_active_power <- as.numeric(as.character(desiredData$Global_active_power))
-desiredData$newMeter1 <- as.numeric(as.character(desiredData$Sub_metering_1))
-desiredData$newMeter2 <- as.numeric(as.character(desiredData$Sub_metering_2))
-desiredData$newMeter3 <- as.numeric(as.character(desiredData$Sub_metering_3))
-desiredData$newVolt <- as.numeric(as.character(desiredData$Voltage))
-## step 3 -> creates Plot 4
+ptable <- read.table("household_power_consumption.txt", header = TRUE, sep = ";", colClasses=c("character","character","double","double","double","double","double","double","numeric"),na.strings="?")
+
+## subset out the two days we are looking for
+ptabledata <-  subset(ptable, Date == "1/2/2007" | Date == "2/2/2007")
+
+##open .png file
 png("plot4.png", width = 480, height = 480)
-par(mfrow=c(2,2))
-plot(desiredData$newDate, desiredData$Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
-plot(desiredData$newDate, desiredData$newVolt, type = "l", xlab = "datetime", ylab = "Voltage")
-plot(desiredData$newDate, desiredData$newMeter1, type = "l", ylim = c(0, max(desiredData$newMeter1, desiredData$newMeter3, desiredData$newMeter2)), xlab = "", ylab = "Energy sub metering")
-lines(desiredData$newDate, desiredData$newMeter2, type = "l", col = "red")
-lines(desiredData$newDate, desiredData$newMeter3, type = "l", col = "blue")
-legend("topright", lty = c(1,1,1), col = c("black","red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
-plot(desiredData$newDate, desiredData$Global_reactive_power, type = "l", xlab = "datetime", ylab = "Global_reactive_power")
+
+##concat Date and Time into DateTime
+ptabledata$DateTime <- strptime(paste(ptabledata$Date,ptabledata$Time),"%d/%m/%Y %H:%M:%S")
+
+##set up 2x2 layout
+par(mfrow = c(2,2))
+
+##draw Plot1
+plot(ptabledata$DateTime,
+     ptabledata$Global_active_power, 
+     type = "l",
+     ylab = "Global Active Power",
+     xlab = NA)
+
+
+##draw Plot2
+plot(ptabledata$DateTime,
+     ptabledata$Voltage, 
+     type = "l",
+     ylab = "Voltage",
+     xlab = "datetime")
+
+## draw Plot3
+plot(ptabledata$DateTime,
+     ptabledata$Sub_metering_1, 
+     type = "l",
+     ylab = "Energy sub metering",
+     xlab = NA)
+lines(ptabledata$DateTime,
+      ptabledata$Sub_metering_2, 
+      type = "l",
+      col = "red")
+lines(ptabledata$DateTime,
+      ptabledata$Sub_metering_3, 
+      type = "l",
+      col = "blue")
+legend("topright", 
+       c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), 
+       lty = c(1,1), 
+       col = c("black", "red", "blue"),
+       bty = "n")
+
+##draw Plot4
+plot(ptabledata$DateTime,
+     ptabledata$Global_reactive_power, 
+     type = "l",
+     ylab = "Global_reactive_power",
+     xlab = "datetime",
+     lwd = .5)
+
+##close png file
 dev.off()
