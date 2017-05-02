@@ -12,7 +12,7 @@ eData$newMeter1 <- as.numeric(as.character(eData$Sub_metering_1))
 eData$newMeter2 <- as.numeric(as.character(eData$Sub_metering_2))
 eData$newMeter3 <- as.numeric(as.character(eData$Sub_metering_3))
 ## step 3 -> creates Plot 3
-png("plot3.png")
+png("plot3.png", width = 480, height = 480)
 plot(eData$newDate, eData$newMeter1, type = "l", ylim = c(0, max(eData$newMeter1, eData$newMeter3, eData$newMeter2)), xlab = "", ylab = "Energy sub metering")
 lines(eData$newDate, eData$newMeter2, type = "l", col = "red")
 lines(eData$newDate, eData$newMeter3, type = "l", col = "blue")
