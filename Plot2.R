@@ -9,6 +9,6 @@ desiredData$newDate <- with(desiredData, as.POSIXct(paste(Date, Time, sep = " ")
 pwr <- as.numeric(desiredData$Global_active_power)
 desiredData$Global_active_power <- as.numeric(as.character(desiredData$Global_active_power))
 ## step 3 ->creates Plot 2
-png("plot2.png")
+png("plot2.png", width = 480, height = 480)
 plot(desiredData$newDate, desiredData$Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
 dev.off()
